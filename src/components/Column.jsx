@@ -2,7 +2,7 @@ import React from 'react'
 import { Droppable } from '@hello-pangea/dnd'
 import Card from './Card'
 
-function Column({ column, tasks }) {
+function Column({ column, tasks, onDelete, onAddTask }) {
   const getColumnClass = () => {
     if (column.title === 'To Do') return 'column-todo'
     if (column.title === 'In Progress') return 'column-in-progress'
@@ -17,6 +17,13 @@ function Column({ column, tasks }) {
           {column.title}
           <span className="task-count">{tasks.length}</span>
         </h2>
+        <button
+          className="add-task-btn"
+          onClick={() => onAddTask(column.id)}
+          title="Add new ticket"
+        >
+          + Add Ticket
+        </button>
       </div>
       <Droppable droppableId={column.id}>
         {(provided, snapshot) => (
@@ -28,7 +35,7 @@ function Column({ column, tasks }) {
             }`}
           >
             {tasks.map((task, index) => (
-              <Card key={task.id} task={task} index={index} />
+              <Card key={task.id} task={task} index={index} onDelete={onDelete} />
             ))}
             {provided.placeholder}
           </div>

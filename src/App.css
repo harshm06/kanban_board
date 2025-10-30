@@ -57,6 +57,30 @@
   justify-content: space-between;
 }
 
+.add-task-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+}
+
+.add-task-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.add-task-btn:active {
+  transform: translateY(0);
+}
+
 .task-count {
   background: rgba(0, 0, 0, 0.1);
   padding: 4px 12px;
@@ -110,6 +134,7 @@
   cursor: grab;
   transition: all 0.2s ease;
   border-left: 4px solid;
+  position: relative;
 }
 
 .kanban-card:hover {
@@ -176,6 +201,41 @@
   font-size: 0.75rem;
   color: #999;
   font-weight: 500;
+}
+
+.card-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ff4757;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.2s ease;
+  padding: 0;
+  box-shadow: 0 2px 4px rgba(255, 71, 87, 0.3);
+}
+
+.kanban-card:hover .card-delete-btn {
+  opacity: 1;
+}
+
+.card-delete-btn:hover {
+  background: #d63031;
+  transform: scale(1.1);
+}
+
+.card-delete-btn:active {
+  transform: scale(0.95);
 }
 
 .column-todo .kanban-card {

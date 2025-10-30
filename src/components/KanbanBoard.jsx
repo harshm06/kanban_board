@@ -102,6 +102,80 @@ function KanbanBoard() {
     setState(newState)
   }
 
+  const deleteTask = (taskId) => {
+    // Remove task from tasks object
+    const newTasks = { ...state.tasks }
+    delete newTasks[taskId]
+
+    // Remove task from all columns
+    const newColumns = {}
+    Object.keys(state.columns).forEach((columnId) => {
+      const column = state.columns[columnId]
+      newColumns[columnId] = {
+        ...column,
+        taskIds: column.taskIds.filter((id) => id !== taskId),
+      }
+    })
+
+    setState({
+      ...state,
+      tasks: newTasks,
+      columns: newColumns,
+    })
+  }
+
+  const addTask = (columnId) => {
+    const title = prompt('Enter task title:')
+    if (!title || title.trim() === '') return
+
+    const description = prompt('Enter task description:')
+    if (description === null) return
+
+    const priority = prompt('Enter priority (high, medium, low):', 'medium')
+    if (priority === null) return
+
+    // Validate priority
+    const validPriority = ['high', 'medium', 'low'].includes(priority.toLowerCase())
+      ? priority.toLowerCase()
+      : 'medium'
+
+    // Generate new task ID
+    const taskIds = Object.keys(state.tasks)
+    const taskNumbers = taskIds.map((id) => parseInt(id.split('-')[1]))
+    const maxTaskNumber = taskNumbers.length > 0 ? Math.max(...taskNumbers) : 0
+    const newTaskId = `task-${maxTaskNumber + 1}`
+
+    // Create new task
+    const newTask = {
+      id: newTaskId,
+      title: title.trim(),
+      description: description.trim(),
+      priority: validPriority,
+    }
+
+    // Add task to tasks object
+    const newTasks = {
+      ...state.tasks,
+      [newTaskId]: newTask,
+    }
+
+    // Add task to column
+    const column = state.columns[columnId]
+    const newColumn = {
+      ...column,
+      taskIds: [...column.taskIds, newTaskId],
+    }
+
+    setState({
+      ...state,
+      tasks: newTasks,
+      columns: {
+        ...state.columns,
+        [columnId]: newColumn,
+      },
+    })
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="kanban-board">
@@ -109,7 +183,15 @@ function KanbanBoard() {
           const column = state.columns[columnId]
           const tasks = column.taskIds.map((taskId) => state.tasks[taskId])
 
-          return <Column key={column.id} column={column} tasks={tasks} />
+          return (
+            <Column
+              key={column.id}
+              column={column}
+              tasks={tasks}
+              onDelete={deleteTask}
+              onAddTask={addTask}
+            />
+          )
         })}
       </div>
     </DragDropContext>

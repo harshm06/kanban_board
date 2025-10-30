@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { DragDropContext } from '@hello-pangea/dnd'
 import Column from './Column'
+import TicketFormModal from './TicketFormModal'
 
 const initialData = {
   tasks: {
@@ -33,6 +34,8 @@ const initialData = {
 
 function KanbanBoard() {
   const [state, setState] = useState(initialData)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedColumnId, setSelectedColumnId] = useState(null)
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result
@@ -124,21 +127,17 @@ function KanbanBoard() {
     })
   }
 
-  const addTask = (columnId) => {
-    const title = prompt('Enter task title:')
-    if (!title || title.trim() === '') return
+  const openAddTaskModal = (columnId) => {
+    setSelectedColumnId(columnId)
+    setIsModalOpen(true)
+  }
 
-    const description = prompt('Enter task description:')
-    if (description === null) return
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setSelectedColumnId(null)
+  }
 
-    const priority = prompt('Enter priority (high, medium, low):', 'medium')
-    if (priority === null) return
-
-    // Validate priority
-    const validPriority = ['high', 'medium', 'low'].includes(priority.toLowerCase())
-      ? priority.toLowerCase()
-      : 'medium'
-
+  const handleAddTask = (taskData) => {
     // Generate new task ID
     const taskIds = Object.keys(state.tasks)
     const taskNumbers = taskIds.map((id) => parseInt(id.split('-')[1]))
@@ -148,9 +147,7 @@ function KanbanBoard() {
     // Create new task
     const newTask = {
       id: newTaskId,
-      title: title.trim(),
-      description: description.trim(),
-      priority: validPriority,
+      ...taskData,
     }
 
     // Add task to tasks object
@@ -160,7 +157,7 @@ function KanbanBoard() {
     }
 
     // Add task to column
-    const column = state.columns[columnId]
+    const column = state.columns[selectedColumnId]
     const newColumn = {
       ...column,
       taskIds: [...column.taskIds, newTaskId],
@@ -171,7 +168,7 @@ function KanbanBoard() {
       tasks: newTasks,
       columns: {
         ...state.columns,
-        [columnId]: newColumn,
+        [selectedColumnId]: newColumn,
       },
     })
   }
@@ -189,11 +186,17 @@ function KanbanBoard() {
               column={column}
               tasks={tasks}
               onDelete={deleteTask}
-              onAddTask={addTask}
+              onAddTask={openAddTaskModal}
             />
           )
         })}
       </div>
+      <TicketFormModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSubmit={handleAddTask}
+        columnId={selectedColumnId}
+      />
     </DragDropContext>
   )
 }

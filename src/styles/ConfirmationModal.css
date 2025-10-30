@@ -1,0 +1,83 @@
+/* Confirmation Modal Styles */
+.confirmation-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.confirmation-message {
+  font-size: 0.9375rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Confirmation Actions */
+.confirmation-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-confirm {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-family: inherit;
+  color: white;
+}
+
+/* Confirmation Button Variants */
+.btn-confirm.btn-danger {
+  background-color: #ef4444;
+}
+
+.btn-confirm.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+.btn-confirm.btn-danger:active {
+  background-color: #b91c1c;
+}
+
+.btn-confirm.btn-warning {
+  background-color: #f59e0b;
+}
+
+.btn-confirm.btn-warning:hover {
+  background-color: #d97706;
+}
+
+.btn-confirm.btn-primary {
+  background-color: #3b82f6;
+}
+
+.btn-confirm.btn-primary:hover {
+  background-color: #2563eb;
+}
+
+.btn-confirm.btn-success {
+  background-color: #10b981;
+}
+
+.btn-confirm.btn-success:hover {
+  background-color: #059669;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .confirmation-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    width: 100%;
+  }
+}
